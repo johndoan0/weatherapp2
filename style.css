@@ -1,0 +1,22 @@
+div{
+	border: 1px solid black;
+}
+
+.currentInfoView, .rightView{
+	flex-grow: 1;
+}	
+
+.centerView{
+	flex-grow: 2;
+	display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#currentImg{
+	width: 25%;
+}
+
+#mainWrapper{
+	display: flex;
+}
