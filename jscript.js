@@ -13,8 +13,12 @@ console.log("js loaded")
 
 // import { test } from "testimportexport";
 
-//global variable
-var navGeoGet = navigator.geolocation.getCurrentPosition(latLong); //initiates everything
+
+//if getCurrentPosition deprecated [chrome], use google api for lat/long
+if (navigator.geolocation) {
+	var navGeoGet = navigator.geolocation.getCurrentPosition(latLong);
+}
+
 
 function latLong(position){
 
