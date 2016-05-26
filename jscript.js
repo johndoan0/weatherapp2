@@ -1,6 +1,8 @@
 console.log("js loaded")
 
-//The goal of this app is to make a weather app with plain JS.
+
+
+//The goal of this app is to make a weather app with plain JS. (except the api request!)
 
 //to fix:
 //why doesn't import/export work?
@@ -11,10 +13,7 @@ console.log("js loaded")
 //svg of f and c on temps
 
 
-// import { test } from "testimportexport";
 
-
-//if getCurrentPosition deprecated [chrome], use google api for lat/long
 if (navigator.geolocation) {
 	var navGeoGet = navigator.geolocation.getCurrentPosition(latLong);
 }
@@ -29,54 +28,74 @@ function latLong(position){
 	console.log("latitude " + latitude);
 	console.log("longitude " + longitude);
 
-	weatherXMLRequest(latitude, longitude);
+	// weatherXMLRequest(latitude, longitude);
+
+	weatherAjax(latitude, longitude);
 }
 
-function weatherXMLRequest(lat, long){
+// function weatherXMLRequest(lat, long){
 
-	//make and send XMLrequest
-	var weatherXMLReq = new XMLHttpRequest(),
-		wXMLReq = weatherXMLReq,
-		APIURL = "https://api.forecast.io/forecast/",
-		APIKey = "d7420952a925f111f6437e0ef6c5c530/",
-		wOpen = wXMLReq.open("GET", APIURL + APIKey + lat + "," + long, true),
-		wSend = wXMLReq.send(); 
+// 	//make and send XMLrequest
+// 	var weatherXMLReq = new XMLHttpRequest(),
+// 		wXMLReq = weatherXMLReq,
+// 		APIURL = "https://api.forecast.io/forecast/",
+// 		APIKey = "d7420952a925f111f6437e0ef6c5c530/",
+// 		wOpen = wXMLReq.open("GET", APIURL + APIKey + lat + "," + long, true),
+// 		wSend = wXMLReq.send(); 
 
-	wXMLReq.onreadystatechange = function(){
+// 	wXMLReq.onreadystatechange = function(){
 		
-  	//CORS solutions to try:
-  	//iframes
-  	//window.postMessage
-  	//JSONP
-  	//server-side proxy(node.js)
-  	//https://jvaneyck.wordpress.com/2014/01/07/cross-domain-requests-in-javascript/
+//   	//CORS solutions to try:
+//   	//iframes
+//   	//window.postMessage
+//   	//JSONP
+//   	//server-side proxy(node.js)
+//   	//https://jvaneyck.wordpress.com/2014/01/07/cross-domain-requests-in-javascript/
 
-  	//need better error-handling(timeout, no response, etc.)
+//   	//need better error-handling(timeout, no response, etc.)
 
-  	//add animation during loading
+//   	//add animation during loading
 
-	  	// console.log("ready state changed " + wXMLReq.readyState)
-	 	var resp = wXMLReq.responseText;
+// 	  	// console.log("ready state changed " + wXMLReq.readyState)
+// 	 	var resp = wXMLReq.responseText;
 
-	 	//Request successful, read the response
-	 	if (wXMLReq.readyState === 4){
-	 		var respToJSON = JSON.parse(resp);
+// 	 	//Request successful, read the response
+// 	 	if (wXMLReq.readyState === 4){
 
-	 		// console.log(wXMLReq.status);
-	 		// console.log(wXMLReq.statusText);
-	 		console.log(respToJSON);
-	 		// console.log(respToJSON.daily);
-	 		// console.log(resp)
-	 		weatherView(respToJSON);
-	 	}
-	}	
+// 	 		var respToJSON = JSON.parse(resp);
+
+// 	 		// console.log(wXMLReq.status);
+// 	 		// console.log(wXMLReq.statusText);
+// 	 		console.log(respToJSON);
+// 	 		// console.log(respToJSON.daily);
+// 	 		// console.log(resp)
+// 	 		weatherView(respToJSON);
+// 	 	}
+// 	}	
+// }
+
+function weatherAjax(lat, long){
+
+	var APIURL = "https://api.forecast.io/forecast/", 		
+		APIKey = "d7420952a925f111f6437e0ef6c5c530/";
+
+	$.ajax({
+		url: APIURL + APIKey + lat + ',' + long,
+		dataType: "jsonp",
+		success: function (data){
+			
+			var wData = data;
+			weatherView(wData);
+		}
+	});
 }
+
+
 
 // ---VIEW---- 
 function weatherView(wInfo){
 	// console.log("weather view");
-	// console.log(wInfo);
-	// test();
+	console.log("weather ajax --> view ok ", wInfo);
 	leftColumnView(wInfo);
 	centerColumnView(wInfo);
 	rightColumnView(wInfo);
